@@ -53,3 +53,6 @@ console.log(sortSquares(nums1)); // Output: [0,1,9,16,100]
 console.log(sortSquares(nums2)); // Output: [4,9,9,49,121]
 console.log(sortSquares(nums3)); // Output: [0,0,25,49,99980001,100000000,100000000]
 console.log(sortSquares(nums4));
+
+// Time complexity: O(n)
+// space complexity O(n)
