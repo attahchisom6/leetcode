@@ -1,6 +1,5 @@
-Input
-[-10000,-9999,-7,-5,0,0,10000]
-Output
-[0,0,25,49,10816,10816,10816]
-Expected
-[0,0,25,49,99980001,100000000,100000000]
+Consider a bug at the foot of a cylinder of height h and raduis r. Unable to climb out the cylinder vertically, decided to clim out by moving eith a vertical angle  theta to the circlular bottom at constant speeed. if it eventually  made it out.
+
+1. start by drawing a pictorial representation of the problem
+2. what is the name of the curve traced out by the bug b?
+3. Using any coordinate system euitable to this situation, derive the equation of the curve, each logic towards ur solution should be represented pictorially
