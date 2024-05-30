@@ -1,0 +1,58 @@
+I am buildinng an Authentication service for a microservice, the achitecture is as follows
+API GATEWAY
+1. a request is sent from the frontend by a user.
+2. the request passes throgh the api gateway where the follows action happens
+    a. the user is checked in thhe database to determine its role
+    b. if the role is neither admin nor a registered user, his role is determined as quest
+    c. if he is an admin, a reduection to the admin page, if a registered user, we directly
+       access the cache service for his informaion to determine wha he loves browsing,
+       however if he is a guest, he can access certain routes, if he wants to perform actions
+       he is not authorized to, he is aked to register b4 proceeding, if he agress the id directed
+       to thr Authentication service.
+
+AUTHENTICATION SERVICE
+    a. Handle user login or registration depending on if he is regidtered or not
+    b. once a user is regidtered, a session id and a session token rotation are created
+    Sessionta Management
+        i. session_id: A unique identifier for a user session, used to associate requests with the same session.
+
+        session_token: A cryptographic token used for authentication and authorization. It should contain information like user ID, expiration time, and possibly roles or permissions.
+
+        session  token rotation: Periodically refreshing session tokens enhances security by minimizing the window of opportunity for attackers. When a session token is rotated, the old token should be invalidated to prevent unaut
+
+
+                  +---------------------+               +----------------------+
+                  |                     |               |                      |
+                  |     Frontend        |               |                      |
+                  |     User Request    |               |                      |
+                  |                     |               |                      |
+                  +----------+----------+               +----------+-----------+
+                             |                                        |
+                             |                                        |
+                             V                                        |
+                  +----------+-----------+                +-----------+----------+
+                  |                      |                |                      |
+                  |      API Gateway     |                |  Authentication      |
+                  |                      |                |      Service         |
+                  |                      |                |                      |
+                  +----------+-----------+                +----------+-----------+
+                             |                                        |
+                             |                                        |
+                             V                                        |
+                  +----------+-----------+                +----------+-----------+
+                  |                      |                |                      |
+                  |    Role Check       |                |  Handle User Login/  |
+                  |    Forward to       |                |  Registration        |
+                  |    Authentication   |                |  Session Management |
+                  |    if necessary     |                |                      |
+                  +----------+-----------+                +----------+-----------+
+                             |                                        |
+                             |                                        |
+                             V                                        |
+                  +----------+-----------+                            |
+                  |                      |                            |
+                  |    Access Caching    |                            |
+                  |    Service for       |                            |
+                  |    User Information |                            |
+                  +----------------------+
+

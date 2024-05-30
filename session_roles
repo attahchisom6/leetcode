@@ -1,0 +1,48 @@
+Roles of Session ID and Session Token:
+Session ID:
+Unique Identifier:
+
+The session ID uniquely identifies a user's session. It is generated when the user logs in or registers and remains constant throughout the session.
+It is used to track the user's activity and associate their requests with their session.
+Session Management:
+
+The session ID is stored on the server-side, typically in a database or an in-memory store (e.g., Redis).
+It helps in managing user sessions, including session creation, validation, and termination.
+State Management:
+
+The session ID allows the server to maintain stateful interactions with the user. For example, it can store information about the user's current state, preferences, or any temporary data required for the session.
+Session Token:
+Authentication:
+
+The session token, often implemented as a JWT (JSON Web Token), is used to authenticate user requests. It contains encoded information such as the user ID, roles, permissions, and expiration time.
+The token is passed with each request, usually in the HTTP headers (e.g., Authorization header).
+Authorization:
+
+The session token helps in authorizing user actions based on their roles and permissions. It ensures that users can only access resources and perform actions they are permitted to.
+Security:
+
+The session token enhances security by enabling token rotation. Periodically rotating tokens reduces the risk of token theft and misuse.
+Tokens are signed to prevent tampering. The server can verify the signature to ensure the token's integrity and authenticity.
+Stateless Authentication:
+
+Unlike the session ID, which is stateful and managed server-side, the session token allows for stateless authentication. The server does not need to store the token; it can validate the token on each request.
+This makes the system more scalable, as it reduces the need for server-side session storage.
+Example Flow:
+User Login/Register:
+
+User logs in or registers through the Authentication Service.
+A session ID is created and stored server-side.
+A session token (JWT) is generated and sent to the user.
+User Makes a Request:
+
+User sends a request with the session token in the HTTP header.
+The API Gateway verifies the token's validity and extracts the user information.
+Role and Authorization Check:
+
+The API Gateway checks the user's role (admin, registered user, guest) from the token.
+Based on the role, the request is processed accordingly (e.g., access caching service, redirect to admin page, etc.).
+Session Management:
+
+If the session token is nearing expiration, the server may issue a new token (rotation) and invalidate the old one.
+If the user logs out, the session ID is invalidated, and the session is terminated.
+By leveraging session IDs and session tokens effectively, your application can manage user sessions securely, ensuring authenticated and authorized access to resources and services.

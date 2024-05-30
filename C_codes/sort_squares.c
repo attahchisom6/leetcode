@@ -79,3 +79,6 @@ int main(void) {
     printf("]\n");
     free(result);
 }
+
+// Time complexity: O(n)
+// space complexity O(n)

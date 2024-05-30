@@ -30,7 +30,6 @@ const sumLongNums = (str1, str2) => {
   let shortest, longest;
   let result = '';
   let k, carryOver = 0;
-  let num1, num2 = 0;
 
   if (str1.length > str2.length) {
     longest = revStr(str1);
@@ -42,48 +41,38 @@ const sumLongNums = (str1, str2) => {
 
   k = 0;
   while (k < shortest.length) {
-    num1 = parseInt(shortest[k]);
-    num2 += parseInt(longest[k]);
-    let res = num1 + num2;
-    if (res > 9) {
-      const resStr = String(res);
-      carryOver = parseInt(resStr[0]);
-      console.log(carryOver);
-      res = parseInt(resStr[1]);
-    }
-    result += res;
-    num2 = num2 + carryOver;
+    let num1 = parseInt(shortest[k]);
+    let num2 = parseInt(longest[k]);
+    let sum = num1 + num2 + carryOver;
+    carryOver = Math.floor(sum / 10);
+    sum = sum % 10;
+
+    result += sum;
     k++;
   }
 
-  /*if (carryOver) {
-    num2 = num2 + carryOver;
-    console.log(`carryOver here: ${carryOver}`);
-    console.log(`num2 here: ${num2}`);
-  }*/
 
   // add remaining digits from longest
   while (k < longest.length) {
-    result += longest[k];
+    let num2 = parseInt(longest[k]);
+    let sum = num2 + carryOver;
+    carryOver = Math.floor(sum / 10);
+    sum = sum % 10;
+    result += sum;
     k++;
   }
+
+  if (carryOver > 0)
+    result += carryOver;
 
   return revStr(result);
 }
 
 const revStr = (str) => {
-  let result = '';
-  if (!str)
-    return result;
-
-  let end = str.length - 1;
-
-  while (end >= 0) {
-    result += str[end];
-    end--;
-  }
-  return result;
+  return str.split('').reverse().join('')
 }
 
 console.log(sumLongNums('123', '456'));
 console.log(sumLongNums('125', '456'));
+console.log(sumLongNums('12565829', '456'));
+console.log(sumLongNums('456', '12565829'));
