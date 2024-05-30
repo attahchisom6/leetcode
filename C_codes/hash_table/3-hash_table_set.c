@@ -13,7 +13,7 @@ char *_strcpy(const char *src, char *dest)
     int k;
 
     k = 0;
-    while (k != '\0')
+    while (src[k] != '\0')
     {
         dest[k] = src[k];
         k++;
@@ -32,21 +32,40 @@ char *_strcpy(const char *src, char *dest)
 
 char *_strdup(const char *str)
 {
-    int len, k;
+    int len;
     char *str_space;
 
     if (!str)
         return (NULL);
 
-    k = 0;
-    while (str[k] != '\0')
-        k++;
+    len = 0;
+    while (str[len] != '\0')
+        len++;
 
-    len = k + 1;
+    len++;
     str_space = malloc(len * sizeof(char));
     if (!str_space)
         return NULL;
     return _strcpy(str, str_space);
+}
+
+/**
+ * _strcmp - compares two string for equality
+ * @s1: first string
+ * @s2: second string
+ *
+ * Return: 0 of equal.
+ */
+
+int _strcmp(char *s1, char *s2)
+{
+	int k = 0;
+
+	while (s1[k] != '\0' && s1[k] == s2[k])
+	{
+		k++;
+	}
+	return s1[k] - s2[k];
 }
 
 /**
@@ -61,21 +80,50 @@ char *_strdup(const char *str)
 int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 {
     unsigned long int index;
-    char *val;
-    unsigned long int k;
+    char *val, *key_cpy;
+    hash_node_t *new, *temp;
 
-    index = hash_djb2((unsigned char *)key);
+    if (!ht || !ht->array || !key)
+	    return (1);
+
     val = _strdup(value);
     if (!val)
         return (1);
 
-    if (!ht->array)
-        return (1);
+    key_cpy = strdup(key);
+    if (!key_cpy)
+    {
+	    free(val);
+	    return (1);
+    }
 
-    k = 0;
-    while (k < index)
-        ht->array[k] = ht->array[k]->next;
-    ht->array[index]->key = (char *)key;
-    ht->array[index]->value = val;
+    index = key_index((const unsigned char *)key, ht->size);
+
+    // we make the current entry in array at index a head of link
+    temp = ht->array[index];
+    while (temp)
+    {
+	    if (_strcmp(temp->key, (char *)key) == 0) {
+		    free(temp->value);
+		    temp->value = val;
+		    return (0);
+	    }
+	    temp = temp->next;
+    }
+
+    // create a new node if the key doesnt exist
+    new = malloc(sizeof(hash_node_t));
+    if (!new)
+    {
+	    free(val);
+	    return (1);
+    }
+
+    // add all node whose key hash to the same index at the begining of the link
+    // i.e chain collision
+    new->key = key_cpy;
+    new->value = val;
+    new->next = ht->array[index];
+    ht->array[index] = new;
     return (0);
 }
