@@ -83,18 +83,18 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
     char *val, *key_cpy;
     hash_node_t *new, *temp;
 
-    if (!ht || !ht->array || !key)
-	    return (1);
+    if (!ht || !ht->array || !key || !*key)
+	    return (0);
 
     val = _strdup(value);
     if (!val)
-        return (1);
+        return (0);
 
-    key_cpy = strdup(key);
+    key_cpy = _strdup(key);
     if (!key_cpy)
     {
-	    free(val);
-	    return (1);
+        free(val);
+        return (0);
     }
 
     index = key_index((const unsigned char *)key, ht->size);
@@ -106,7 +106,8 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 	    if (_strcmp(temp->key, (char *)key) == 0) {
 		    free(temp->value);
 		    temp->value = val;
-		    return (0);
+            free(key_cpy);
+		    return (1);
 	    }
 	    temp = temp->next;
     }
@@ -115,15 +116,14 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
     new = malloc(sizeof(hash_node_t));
     if (!new)
     {
-	    free(val);
-	    return (1);
+        free(key_cpy);
+        free(val);
+        return (0);
     }
-
-    // add all node whose key hash to the same index at the begining of the link
     // i.e chain collision
     new->key = key_cpy;
     new->value = val;
     new->next = ht->array[index];
     ht->array[index] = new;
-    return (0);
+    return (1);
 }
