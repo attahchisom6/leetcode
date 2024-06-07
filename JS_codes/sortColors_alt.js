@@ -28,3 +28,6 @@ arr3 = [2,0,1];
 console.log(sortColors(arr1));
 console.log(sortColors(arr2));
 console.log(sortColors(arr3));
+
+// Time Complexity: One pass of the array was made: O(n)
+// Space Complexity: because its in-place - O(1);
